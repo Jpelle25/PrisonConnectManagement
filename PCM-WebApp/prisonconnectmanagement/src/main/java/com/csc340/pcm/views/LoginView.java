@@ -11,7 +11,6 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,21 +27,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     public LoginView() throws URISyntaxException, IOException, InterruptedException {
 
-//        HttpRequest getRequest = HttpRequest.newBuilder()
-//                .uri(new URI("https://api.giphy.com/v1/gifs/xUPGGDNsLvqsBOhuU0?api_key=ZjxFtJ4r2cjujC3zoAxwMpEdJRHne7iX"))
-//                .GET()
-//                .build();
-//
-//        HttpClient httpClient = HttpClient.newHttpClient();
-//        HttpResponse<String> getResponse = httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
-//        Giphy giphy = new Giphy();
-//        Gson gson = new Gson();
-//
-//        giphy = gson.fromJson(getResponse.body(), Giphy.class);
-//        Image img2 = new Image(giphy.getData().getImages().getFixed_height_downsampled().getUrl(), giphy.getData().getTitle());
-//        img2.setWidth("450px");
-
-
         addClassName("login-view");
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
@@ -55,6 +39,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+
         // inform the user about an authentication error
         if(beforeEnterEvent.getLocation()
                 .getQueryParameters()
@@ -62,9 +47,11 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
                 .containsKey("error")) {
             login.setError(true);
         }
+
     }
 
     private Image apiLoginImage() throws URISyntaxException, IOException, InterruptedException {
+
         HttpRequest getRequest = HttpRequest.newBuilder()
                 .uri(new URI("https://api.giphy.com/v1/gifs/xUPGGDNsLvqsBOhuU0?api_key=ZjxFtJ4r2cjujC3zoAxwMpEdJRHne7iX"))
                 .GET()
@@ -80,4 +67,5 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         loginImage.setWidth("450px");
         return loginImage;
     }
+
 }
