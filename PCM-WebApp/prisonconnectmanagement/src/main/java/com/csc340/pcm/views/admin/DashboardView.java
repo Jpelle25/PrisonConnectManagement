@@ -1,4 +1,4 @@
-package com.csc340.pcm.views;
+package com.csc340.pcm.views.admin;
 
 import com.csc340.pcm.service.CrmService;
 import com.csc340.pcm.views.MainLayout;
