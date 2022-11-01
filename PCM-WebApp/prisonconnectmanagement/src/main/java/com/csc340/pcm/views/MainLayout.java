@@ -2,7 +2,10 @@ package com.csc340.pcm.views;
 
 import com.csc340.pcm.views.DashboardView;
 import com.csc340.pcm.security.SecurityService;
-import com.csc340.pcm.views.ListView;
+//import com.csc340.pcm.views.ListView;
+import com.csc340.pcm.views.admin.AdminView;
+import com.csc340.pcm.views.organization.*;
+import com.csc340.pcm.views.visitor.VisitorView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -12,11 +15,16 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.swing.text.html.ListView;
 
+//@Route("")
+//@PermitAll
 public class MainLayout extends AppLayout {
 
     private SecurityService securityService;
@@ -25,8 +33,6 @@ public class MainLayout extends AppLayout {
         this.securityService = securityService;
         createHeader();
         createDrawer();
-
-        
     }
 
     private void createHeader() {
@@ -52,17 +58,33 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
-        RouterLink listLink = new RouterLink("List", ListView.class);
-        listLink.setHighlightCondition(HighlightConditions.sameLocation());
+        RouterLink adminLink = new RouterLink("Admin", AdminView.class);
+        RouterLink organLink = new RouterLink("Organization", OrganizationView.class);
+        RouterLink visitorLink = new RouterLink("Visitor", VisitorView.class);
+        adminLink.setHighlightCondition(HighlightConditions.sameLocation());
+        visitorLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         if(securityService.getAuthenticatedUser().getUsername() == "admin"){
             addToDrawer(new VerticalLayout(
-                    listLink,
+                    adminLink,
                     new RouterLink("Dashboard", DashboardView.class))
             );
-        } else {
+        }
+        else if(securityService.getAuthenticatedUser().getUsername() == "organ"){
+
+            VerticalLayout organizationTabs = new VerticalLayout(
+                    organLink,
+                    new RouterLink("testClass", testClass.class),
+                    new RouterLink("Approved/Denied Events", ApprovedDeniedEvents.class),
+                    new RouterLink("Event Registration", EventRegistration.class),
+                    new RouterLink("Event Scheduler", EventScheduler.class)
+            );
+            addToDrawer(organizationTabs);
+
+        }
+        else{
             addToDrawer(new VerticalLayout(
-                    listLink
+                    visitorLink
             ));
         }
 
