@@ -1,13 +1,13 @@
 package com.csc340.pcm.views;
 
-import com.csc340.pcm.views.DashboardView;
 import com.csc340.pcm.security.SecurityService;
-//import com.csc340.pcm.views.ListView;
 import com.csc340.pcm.views.admin.AdminView;
-//import com.csc340.pcm.views.organization.*;
+import com.csc340.pcm.views.admin.DashboardView;
+import com.csc340.pcm.views.organization.ApprovedDeniedEvents;
+import com.csc340.pcm.views.organization.EventRegistration;
+import com.csc340.pcm.views.organization.EventScheduler;
 import com.csc340.pcm.views.organization.OrganizationView;
 import com.csc340.pcm.views.visitor.VisitorView;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -16,16 +16,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
-
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.swing.text.html.ListView;
-
-//@Route("")
-//@PermitAll
 public class MainLayout extends AppLayout {
 
     private SecurityService securityService;
@@ -65,29 +56,28 @@ public class MainLayout extends AppLayout {
         adminLink.setHighlightCondition(HighlightConditions.sameLocation());
         visitorLink.setHighlightCondition(HighlightConditions.sameLocation());
 
+        //Admin View Direction
         if(securityService.getAuthenticatedUser().getUsername() == "admin"){
             addToDrawer(new VerticalLayout(
                     adminLink,
                     new RouterLink("Dashboard", DashboardView.class))
             );
         }
+
+        //Organization View Direction
         else if(securityService.getAuthenticatedUser().getUsername() == "organ"){
-            addToDrawer(new VerticalLayout(
-                    organLink
-            ));
+
+            VerticalLayout organizationTabs = new VerticalLayout(
+                    organLink,
+                    new RouterLink("Approved/Denied Events", ApprovedDeniedEvents.class),
+                    new RouterLink("Event Registration", EventRegistration.class),
+                    new RouterLink("Event Scheduler", EventScheduler.class)
+            );
+            addToDrawer(organizationTabs);
+
         }
-//        else if(securityService.getAuthenticatedUser().getUsername() == "organ"){
-//
-//            VerticalLayout organizationTabs = new VerticalLayout(
-//                    organLink,
-//                    new RouterLink("testClass", testClass.class),
-//                    new RouterLink("Approved/Denied Events", ApprovedDeniedEvents.class),
-//                    new RouterLink("Event Registration", EventRegistration.class),
-//                    new RouterLink("Event Scheduler", EventScheduler.class)
-//            );
-//            addToDrawer(organizationTabs);
-//
-//        }
+
+        //Visitor View Direction
         else{
             addToDrawer(new VerticalLayout(
                     visitorLink
