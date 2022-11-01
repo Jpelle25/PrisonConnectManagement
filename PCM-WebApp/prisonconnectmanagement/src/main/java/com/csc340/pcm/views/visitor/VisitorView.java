@@ -8,8 +8,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import javax.annotation.security.RolesAllowed;
+
 @PageTitle("Visitor")
 @Route(value = "Visitor", layout = MainLayout.class)
+@RolesAllowed("ROLE_VISITOR")
 public class VisitorView extends VerticalLayout {
 
     public VisitorView() {
