@@ -1,8 +1,6 @@
 package com.csc340.pcm.API;
 
-
 public class Giphy {
-
 
 private GifData data;
 
