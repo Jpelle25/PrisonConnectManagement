@@ -4,7 +4,7 @@ import com.csc340.pcm.views.DashboardView;
 import com.csc340.pcm.security.SecurityService;
 //import com.csc340.pcm.views.ListView;
 import com.csc340.pcm.views.admin.AdminView;
-import com.csc340.pcm.views.organization.*;
+//import com.csc340.pcm.views.organization.*;
 import com.csc340.pcm.views.visitor.VisitorView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -59,7 +59,7 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         RouterLink adminLink = new RouterLink("Admin", AdminView.class);
-        RouterLink organLink = new RouterLink("Organization", OrganizationView.class);
+//        RouterLink organLink = new RouterLink("Organization", OrganizationView.class);
         RouterLink visitorLink = new RouterLink("Visitor", VisitorView.class);
         adminLink.setHighlightCondition(HighlightConditions.sameLocation());
         visitorLink.setHighlightCondition(HighlightConditions.sameLocation());
@@ -70,18 +70,18 @@ public class MainLayout extends AppLayout {
                     new RouterLink("Dashboard", DashboardView.class))
             );
         }
-        else if(securityService.getAuthenticatedUser().getUsername() == "organ"){
-
-            VerticalLayout organizationTabs = new VerticalLayout(
-                    organLink,
-                    new RouterLink("testClass", testClass.class),
-                    new RouterLink("Approved/Denied Events", ApprovedDeniedEvents.class),
-                    new RouterLink("Event Registration", EventRegistration.class),
-                    new RouterLink("Event Scheduler", EventScheduler.class)
-            );
-            addToDrawer(organizationTabs);
-
-        }
+//        else if(securityService.getAuthenticatedUser().getUsername() == "organ"){
+//
+//            VerticalLayout organizationTabs = new VerticalLayout(
+//                    organLink,
+//                    new RouterLink("testClass", testClass.class),
+//                    new RouterLink("Approved/Denied Events", ApprovedDeniedEvents.class),
+//                    new RouterLink("Event Registration", EventRegistration.class),
+//                    new RouterLink("Event Scheduler", EventScheduler.class)
+//            );
+//            addToDrawer(organizationTabs);
+//
+//        }
         else{
             addToDrawer(new VerticalLayout(
                     visitorLink
