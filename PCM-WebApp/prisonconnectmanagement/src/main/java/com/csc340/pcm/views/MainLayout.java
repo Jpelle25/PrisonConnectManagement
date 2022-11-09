@@ -1,12 +1,11 @@
 package com.csc340.pcm.views;
 
 import com.csc340.pcm.security.SecurityService;
-import com.csc340.pcm.views.admin.AdminView;
-import com.csc340.pcm.views.admin.DashboardView;
 import com.csc340.pcm.views.organization.ApprovedDeniedEvents;
 import com.csc340.pcm.views.organization.EventRegistration;
 import com.csc340.pcm.views.organization.EventScheduler;
-import com.csc340.pcm.views.organization.OrganizationView;
+//import com.csc340.pcm.views.ListView;
+import com.csc340.pcm.views.admin.*;
 import com.csc340.pcm.views.visitor.VisitorView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -51,7 +50,6 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         RouterLink adminLink = new RouterLink("Admin", AdminView.class);
-        RouterLink organLink = new RouterLink("Organization", OrganizationView.class);
         RouterLink visitorLink = new RouterLink("Visitor", VisitorView.class);
         adminLink.setHighlightCondition(HighlightConditions.sameLocation());
         visitorLink.setHighlightCondition(HighlightConditions.sameLocation());
@@ -60,7 +58,8 @@ public class MainLayout extends AppLayout {
         if(securityService.getAuthenticatedUser().getUsername() == "admin"){
             addToDrawer(new VerticalLayout(
                     adminLink,
-                    new RouterLink("Dashboard", DashboardView.class))
+                    new RouterLink("Dashboard", DashboardView.class),
+                    new RouterLink("Pending Requests", AcceptDenyView.class))
             );
         }
 
@@ -68,7 +67,6 @@ public class MainLayout extends AppLayout {
         else if(securityService.getAuthenticatedUser().getUsername() == "organ"){
 
             VerticalLayout organizationTabs = new VerticalLayout(
-                    organLink,
                     new RouterLink("Approved/Denied Events", ApprovedDeniedEvents.class),
                     new RouterLink("Event Registration", EventRegistration.class),
                     new RouterLink("Event Scheduler", EventScheduler.class)
