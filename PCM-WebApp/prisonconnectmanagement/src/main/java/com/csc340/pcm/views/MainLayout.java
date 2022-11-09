@@ -6,6 +6,7 @@ import com.csc340.pcm.views.admin.AdminView;
 import com.csc340.pcm.views.organization.ApprovedDeniedEvents;
 import com.csc340.pcm.views.organization.EventRegistration;
 import com.csc340.pcm.views.organization.EventScheduler;
+import com.csc340.pcm.views.visitor.EventList;
 import com.csc340.pcm.views.visitor.VisitorView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -50,8 +51,6 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
-        RouterLink visitorLink = new RouterLink("Visitor", VisitorView.class);
-        visitorLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         //Admin View Direction
         if(securityService.getAuthenticatedUser().getUsername() == "admin"){
@@ -75,7 +74,10 @@ public class MainLayout extends AppLayout {
 
         //Visitor View Direction
         else{
-            addToDrawer(new VerticalLayout(visitorLink));
+            addToDrawer(new VerticalLayout(
+                    new RouterLink("Visitors", VisitorView.class),
+                    new RouterLink("Events List", EventList.class)
+            ));
         }
 
     }
