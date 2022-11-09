@@ -33,7 +33,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
         login.setAction("login");
 
-//        add(new H1("Prison Connect Management"),img2, login);
         add(new H1("Prison Connect Management"),apiLoginImage(), login);
     }
 

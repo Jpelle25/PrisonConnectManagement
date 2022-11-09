@@ -9,7 +9,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -27,7 +26,6 @@ public class EventRegistration extends VerticalLayout {
     TextField orgName = new TextField("Organization Name");
     EmailField orgEmail = new EmailField("Organization Email");
     TextField orgPhoneNo = new TextField("Organization Phone Number");
-//    Select<String> orgType = new Select<>();
     ComboBox<String> orgType = new ComboBox<>();
     TextField eventName = new TextField("Event Name");
     TextArea eventDetails = new TextArea("Event Details");
@@ -35,6 +33,13 @@ public class EventRegistration extends VerticalLayout {
 
 
     public EventRegistration() {
+
+        add(formConfiguration(), formCompletion());
+
+    }
+
+    private FormLayout formConfiguration(){
+
         orgName.setMaxLength(20);
         orgName.setValueChangeMode(ValueChangeMode.EAGER);
         orgName.addValueChangeListener(e -> {
@@ -68,6 +73,12 @@ public class EventRegistration extends VerticalLayout {
         );
         orgForm.setColspan(eventName, 1);
         orgForm.setColspan(eventDetails, 3);
+        return orgForm;
+
+    }
+
+    private HorizontalLayout formCompletion(){
+
         Button createEvent = new Button("Create Event");
         createEvent.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         createEvent.addClickListener(event -> {
@@ -80,7 +91,8 @@ public class EventRegistration extends VerticalLayout {
 
                 Notification emptyFormError = Notification.show("Please enter in all the fields for event registration");
                 emptyFormError.addThemeVariants(NotificationVariant.LUMO_ERROR);
-            }else{
+            }
+            else{
                 Notification successForm = Notification.show("Event Successfully Submitted - Pending Approval");
                 successForm.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 orgName.clear();
@@ -94,14 +106,15 @@ public class EventRegistration extends VerticalLayout {
         });
         Button clearForm = new Button("Clear Form");
         clearForm.addClickListener(event -> {
-                orgName.clear();
-                orgEmail.clear();
-                orgPhoneNo.clear();
-                orgType.clear();
-                eventName.clear();
-                eventDetails.clear();
+            orgName.clear();
+            orgEmail.clear();
+            orgPhoneNo.clear();
+            orgType.clear();
+            eventName.clear();
+            eventDetails.clear();
         });
-        HorizontalLayout buttonLayout = new HorizontalLayout(createEvent, clearForm);
-        add(orgForm, buttonLayout);
+        return new HorizontalLayout(createEvent,clearForm);
+
     }
+
 }
