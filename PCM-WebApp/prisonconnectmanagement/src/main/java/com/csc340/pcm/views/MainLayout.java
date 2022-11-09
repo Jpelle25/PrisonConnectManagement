@@ -1,6 +1,7 @@
 package com.csc340.pcm.views;
 
 import com.csc340.pcm.security.SecurityService;
+import com.csc340.pcm.views.admin.AcceptDenyView;
 import com.csc340.pcm.views.admin.AdminView;
 import com.csc340.pcm.views.organization.ApprovedDeniedEvents;
 import com.csc340.pcm.views.organization.EventRegistration;
@@ -49,14 +50,15 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
-        RouterLink adminLink = new RouterLink("Admin", AdminView.class);
         RouterLink visitorLink = new RouterLink("Visitor", VisitorView.class);
-        adminLink.setHighlightCondition(HighlightConditions.sameLocation());
         visitorLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         //Admin View Direction
         if(securityService.getAuthenticatedUser().getUsername() == "admin"){
-            addToDrawer(new VerticalLayout(adminLink));
+            addToDrawer(new VerticalLayout(
+                    new RouterLink("Admin Dashboard", AdminView.class),
+                    new RouterLink("Pending Requests", AcceptDenyView.class)
+            ));
         }
 
         //Organization View Direction
