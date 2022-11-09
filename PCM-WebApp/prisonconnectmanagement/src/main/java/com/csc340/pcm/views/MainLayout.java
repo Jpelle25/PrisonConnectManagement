@@ -1,11 +1,10 @@
 package com.csc340.pcm.views;
 
 import com.csc340.pcm.security.SecurityService;
+import com.csc340.pcm.views.admin.AdminView;
 import com.csc340.pcm.views.organization.ApprovedDeniedEvents;
 import com.csc340.pcm.views.organization.EventRegistration;
 import com.csc340.pcm.views.organization.EventScheduler;
-//import com.csc340.pcm.views.ListView;
-import com.csc340.pcm.views.admin.*;
 import com.csc340.pcm.views.visitor.VisitorView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -16,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
+
 public class MainLayout extends AppLayout {
 
     private SecurityService securityService;
@@ -56,11 +56,7 @@ public class MainLayout extends AppLayout {
 
         //Admin View Direction
         if(securityService.getAuthenticatedUser().getUsername() == "admin"){
-            addToDrawer(new VerticalLayout(
-                    adminLink,
-                    new RouterLink("Dashboard", DashboardView.class),
-                    new RouterLink("Pending Requests", AcceptDenyView.class))
-            );
+            addToDrawer(new VerticalLayout(adminLink));
         }
 
         //Organization View Direction
@@ -77,9 +73,7 @@ public class MainLayout extends AppLayout {
 
         //Visitor View Direction
         else{
-            addToDrawer(new VerticalLayout(
-                    visitorLink
-            ));
+            addToDrawer(new VerticalLayout(visitorLink));
         }
 
     }

@@ -1,19 +1,15 @@
 package com.csc340.pcm.generator;
 
-import com.csc340.pcm.entity.Company;
-import com.csc340.pcm.entity.Contact;
-import com.csc340.pcm.entity.Status;
-import com.csc340.pcm.repository.CompanyRepository;
-import com.csc340.pcm.repository.ContactRepository;
-import com.csc340.pcm.repository.StatusRepository;
+import com.csc340.pcm.entity.Event;
+import com.csc340.pcm.repository.EventRepository;
 import com.vaadin.exampledata.DataType;
 import com.vaadin.exampledata.ExampleDataGenerator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -23,42 +19,34 @@ import org.springframework.context.annotation.Bean;
 public class DataGenerator {
 
     @Bean
-    public CommandLineRunner loadData(ContactRepository contactRepository, CompanyRepository companyRepository,
-                                      StatusRepository statusRepository) {
+    public CommandLineRunner loadData(EventRepository eventRepository) {
 
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
-            if (contactRepository.count() != 0L) {
-                logger.info("Using existing database");
-                return;
-            }
+
             int seed = 123;
 
             logger.info("Generating demo data");
-            ExampleDataGenerator<Company> companyGenerator = new ExampleDataGenerator<>(Company.class,
-                    LocalDateTime.now());
-            companyGenerator.setData(Company::setName, DataType.COMPANY_NAME);
-            List<Company> companies = companyRepository.saveAll(companyGenerator.create(5, seed));
-
-            List<Status> statuses = statusRepository
-                    .saveAll(Stream.of("Imported lead", "Not contacted", "Contacted", "Customer", "Closed (lost)")
-                            .map(Status::new).collect(Collectors.toList()));
-
-            logger.info("... generating 50 Contact entities...");
-            ExampleDataGenerator<Contact> contactGenerator = new ExampleDataGenerator<>(Contact.class,
-                    LocalDateTime.now());
-            contactGenerator.setData(Contact::setFirstName, DataType.FIRST_NAME);
-            contactGenerator.setData(Contact::setLastName, DataType.LAST_NAME);
-            contactGenerator.setData(Contact::setEmail, DataType.EMAIL);
 
             Random r = new Random(seed);
-            List<Contact> contacts = contactGenerator.create(50, seed).stream().map(contact -> {
-                contact.setCompany(companies.get(r.nextInt(companies.size())));
-                contact.setStatus(statuses.get(r.nextInt(statuses.size())));
-                return contact;
+
+            logger.info("Event generation");
+
+            ExampleDataGenerator<Event> eventGenerator = new ExampleDataGenerator<>(Event.class, LocalDateTime.now());
+            eventGenerator.setData(Event::setOrganizationName, DataType.COMPANY_NAME);
+            eventGenerator.setData(Event::setOrganizationEmail, DataType.EMAIL);
+            eventGenerator.setData(Event::setOrganizationPhoneNumber, DataType.PHONE_NUMBER);
+            List<String> eventTypes = Arrays.asList("Fundraising", "Visitation", "Rehabilitation", "Arts & Craft");
+            eventGenerator.setData(Event::setEventName, DataType.WORD);
+            eventGenerator.setData(Event::setEventDetails, DataType.SENTENCE);
+            List<Event> events = eventGenerator.create(10, seed).stream().map(event -> {
+                event.setOrganizationType(eventTypes.get(r.nextInt(eventTypes.size())));
+                return event;
             }).collect(Collectors.toList());
 
-            contactRepository.saveAll(contacts);
+            eventRepository.saveAll(events);
+
+            logger.info("Got to here after event generation");
 
             logger.info("Generated demo data");
         };

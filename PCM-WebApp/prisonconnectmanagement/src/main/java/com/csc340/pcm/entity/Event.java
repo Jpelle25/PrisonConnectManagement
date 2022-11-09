@@ -2,58 +2,59 @@ package com.csc340.pcm.entity;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Event extends AbstractEntity{
 
-    @NotEmpty
-    private String orgName = "";
+    @NotNull
+    private String organizationName = "";
 
-    @NotEmpty
-    private String orgEmail = "";
+    @NotNull
+    private String organizationEmail = "";
 
-    @NotEmpty
-    private String orgPhoneNo = "";
+    @NotNull
+    private String organizationPhoneNumber = "";
 
-    @NotEmpty
-    private String orgType = "";
+    @NotNull
+    private String organizationType = "";
 
-    @NotEmpty
+    @NotNull
     private String eventName = "";
 
-    @NotEmpty
+    @NotNull
     private String eventDetails = "";
 
-    public String getOrgName() {
-        return orgName;
+    public String getOrganizationName() {
+        return organizationName;
     }
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 
-    public String getOrgEmail() {
-        return orgEmail;
+    public String getOrganizationEmail() {
+        return organizationEmail;
     }
 
-    public void setOrgEmail(String orgEmail) {
-        this.orgEmail = orgEmail;
+    public void setOrganizationEmail(String organizationEmail) {
+        this.organizationEmail = organizationEmail;
     }
 
-    public String getOrgPhoneNo() {
-        return orgPhoneNo;
+    public String getOrganizationPhoneNumber() {
+        return organizationPhoneNumber;
     }
 
-    public void setOrgPhoneNo(String orgPhoneNo) {
-        this.orgPhoneNo = orgPhoneNo;
+    public void setOrganizationPhoneNumber(String organizationPhoneNumber) {
+        this.organizationPhoneNumber = organizationPhoneNumber;
     }
 
-    public String getOrgType() {
-        return orgType;
+    public String getOrganizationType() {
+        return organizationType;
     }
 
-    public void setOrgType(String orgType) {
-        this.orgType = orgType;
+    public void setOrganizationType(String organizationType) {
+        this.organizationType = organizationType;
     }
 
     public String getEventName() {
