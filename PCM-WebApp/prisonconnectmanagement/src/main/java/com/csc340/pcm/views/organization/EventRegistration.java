@@ -1,5 +1,7 @@
 package com.csc340.pcm.views.organization;
 
+import com.csc340.pcm.entity.PendingEventRegistration;
+import com.csc340.pcm.service.EventRegistrationService;
 import com.csc340.pcm.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -31,14 +33,21 @@ public class EventRegistration extends VerticalLayout {
     TextArea eventDetails = new TextArea("Event Details");
     FormLayout orgForm = new FormLayout();
 
+    HorizontalLayout buttonsLayout = new HorizontalLayout();
 
-    public EventRegistration() {
+    EventRegistrationService eventRegistrationService;
 
-        add(formConfiguration(), formCompletion());
+
+    public EventRegistration(EventRegistrationService eventRegistrationService) {
+        this.eventRegistrationService = eventRegistrationService;
+        formConfiguration();
+        formCompletion();
+        add(orgForm, buttonsLayout);
+
 
     }
 
-    private FormLayout formConfiguration(){
+    private void formConfiguration(){
 
         orgName.setMaxLength(20);
         orgName.setValueChangeMode(ValueChangeMode.EAGER);
@@ -73,11 +82,10 @@ public class EventRegistration extends VerticalLayout {
         );
         orgForm.setColspan(eventName, 1);
         orgForm.setColspan(eventDetails, 3);
-        return orgForm;
 
     }
 
-    private HorizontalLayout formCompletion(){
+    private void formCompletion(){
 
         Button createEvent = new Button("Create Event");
         createEvent.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -95,6 +103,8 @@ public class EventRegistration extends VerticalLayout {
             else{
                 Notification successForm = Notification.show("Event Successfully Submitted - Pending Approval");
                 successForm.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                eventRegistrationService.saveEvent(new PendingEventRegistration(orgName.getValue(), orgPhoneNo.getValue(), orgEmail.getValue(),
+                        orgType.getValue(), eventName.getValue(), eventDetails.getValue()));
                 orgName.clear();
                 orgEmail.clear();
                 orgPhoneNo.clear();
@@ -113,7 +123,8 @@ public class EventRegistration extends VerticalLayout {
             eventName.clear();
             eventDetails.clear();
         });
-        return new HorizontalLayout(createEvent,clearForm);
+
+        buttonsLayout.add(createEvent, clearForm);
 
     }
 
