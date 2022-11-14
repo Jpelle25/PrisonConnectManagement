@@ -1,11 +1,10 @@
 package com.csc340.pcm.entity;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Event extends AbstractEntity{
+public class PendingEventRegistration extends AbstractEntity{
 
     @NotNull
     private String organizationName = "";
@@ -24,6 +23,20 @@ public class Event extends AbstractEntity{
 
     @NotNull
     private String eventDetails = "";
+
+    public PendingEventRegistration() {
+
+    }
+
+    public PendingEventRegistration(String organizationName, String organizationEmail, String organizationPhoneNumber,
+                                    String organizationType, String eventName, String eventDetails) {
+        this.organizationName = organizationName;
+        this.organizationEmail = organizationEmail;
+        this.organizationPhoneNumber = organizationPhoneNumber;
+        this.organizationType = organizationType;
+        this.eventName = eventName;
+        this.eventDetails = eventDetails;
+    }
 
     public String getOrganizationName() {
         return organizationName;
