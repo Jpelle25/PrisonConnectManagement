@@ -1,6 +1,8 @@
 package com.csc340.pcm.views.organization;
 
 import com.csc340.pcm.entity.PendingEventRegistration;
+import com.csc340.pcm.entity.PendingScheduledEvents;
+import com.csc340.pcm.service.EventSchedulerService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -16,11 +18,14 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class EventScheduleForm extends FormLayout {
+public class PendingEventScheduleForm extends FormLayout {
 
     TextField organizationName = new TextField("Organization Name");
     TextField organizationEmail = new TextField("Organization Email");
@@ -33,11 +38,14 @@ public class EventScheduleForm extends FormLayout {
     Button scheduleEvent = new Button("Schedule Event");
     Button cancelEventSchedule = new Button("Cancel");
 
+
+    EventSchedulerService eventSchedulerService;
+
     Binder<PendingEventRegistration> binder = new BeanValidationBinder<>(PendingEventRegistration.class);
 
     private PendingEventRegistration pendingEventRegistration;
 
-    public EventScheduleForm(List<PendingEventRegistration> pendingEventRegistrations) {
+    public PendingEventScheduleForm(List<PendingEventRegistration> pendingEventRegistrations) {
         binder.bindInstanceFields(this);
         
         configureFormComponents();
@@ -78,7 +86,6 @@ public class EventScheduleForm extends FormLayout {
 
     private void validateAndSave() {
         try{
-            Notification.show("hello world");
             binder.writeBean(pendingEventRegistration);
             fireEvent(new EventSchedule(this, pendingEventRegistration));
         }catch (ValidationException e){
@@ -91,10 +98,10 @@ public class EventScheduleForm extends FormLayout {
         binder.readBean(pendingEventRegistration);
     }
 
-    public static abstract class EventFormEvent extends ComponentEvent<EventScheduleForm> {
+    public static abstract class EventFormEvent extends ComponentEvent<PendingEventScheduleForm> {
         private PendingEventRegistration pendingEventRegistration;
 
-        protected EventFormEvent(EventScheduleForm source, PendingEventRegistration pendingEventRegistration) {
+        protected EventFormEvent(PendingEventScheduleForm source, PendingEventRegistration pendingEventRegistration) {
             super(source, false);
             this.pendingEventRegistration = pendingEventRegistration;
         }
@@ -105,13 +112,33 @@ public class EventScheduleForm extends FormLayout {
     }
 
     public static class EventSchedule extends EventFormEvent {
-        EventSchedule(EventScheduleForm source, PendingEventRegistration pendingEventRegistration) {
+        EventSchedule(PendingEventScheduleForm source, PendingEventRegistration pendingEventRegistration) {
             super(source, pendingEventRegistration);
+//            if(source.eventStartTime.isEmpty() || source.eventEndTime.isEmpty()){
+//                Notification.show("Please enter in all the fields for event registration");
+//            }
+//            else{
+//                Notification.show("Event Successfully Submitted - Pending Schedule Approval");
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm a");
+////                Notification.show(source.eventStartTime.getValue().format(formatter));
+////                Notification.show(source.eventEndTime.getValue().format(formatter));
+//                source.eventSchedulerService.saveEvent(new PendingScheduledEvents(
+//                        source.organizationName.getValue(),
+//                        source.organizationEmail.getValue(),
+//                        source.organizationPhoneNumber.getValue(),
+//                        source.organizationType.getValue(),
+//                        source.eventName.getValue(),
+//                        source.eventDetails.getValue(),
+//                        source.eventStartTime.getValue().format(formatter),
+//                        source.eventEndTime.getValue().format(formatter)
+//                ));
+//                Notification.show("got to here after saving new repo entry");
+//            }
         }
     }
 
     public static class CancelEventSchedule extends EventFormEvent {
-        CancelEventSchedule(EventScheduleForm source) {
+        CancelEventSchedule(PendingEventScheduleForm source) {
             super(source, null);
         }
 

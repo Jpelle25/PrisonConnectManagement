@@ -2,6 +2,9 @@ package com.csc340.pcm.views.visitor;
 
 import com.csc340.pcm.entity.Prisoner;
 import com.csc340.pcm.service.PrisonerService;
+
+//import com.csc340.pcm.generator.DataGenerator;
+
 import com.csc340.pcm.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -129,7 +132,7 @@ public class VisitorView extends VerticalLayout {
 
         grid.setItems(prisonerService.findAllEvents());
 
-//    }
+    }
 //
 //    /**
 //     * This method saves the list of prisoners to a text file called: prisoner.txt
