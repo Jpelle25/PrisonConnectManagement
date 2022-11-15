@@ -1,7 +1,7 @@
 package com.csc340.pcm.views;
 
 import com.csc340.pcm.security.SecurityService;
-import com.csc340.pcm.views.admin.AcceptDenyView;
+import com.csc340.pcm.views.admin.VerifyOrganizations;
 import com.csc340.pcm.views.admin.AdminView;
 import com.csc340.pcm.views.organization.ApprovedDeniedEvents;
 import com.csc340.pcm.views.organization.EventRegistration;
@@ -56,7 +56,7 @@ public class MainLayout extends AppLayout {
         if(securityService.getAuthenticatedUser().getUsername() == "admin"){
             addToDrawer(new VerticalLayout(
                     new RouterLink("Admin Dashboard", AdminView.class),
-                    new RouterLink("Pending Requests", AcceptDenyView.class)
+                    new RouterLink("Verify Organization Events", VerifyOrganizations.class)
             ));
         }
 
