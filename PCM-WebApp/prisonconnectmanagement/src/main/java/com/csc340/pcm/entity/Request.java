@@ -1,3 +1,6 @@
+//created by Marcus harrington
+//last updated 11/14/22
+//A dummy object that was used to test vaadin applications
 package com.csc340.pcm.entity;
 
 public class Request {

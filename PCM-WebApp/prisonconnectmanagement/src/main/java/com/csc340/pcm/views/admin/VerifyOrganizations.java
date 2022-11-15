@@ -1,5 +1,6 @@
-//
-//
+//Created By Marcus Harrington
+//Last updated 11/15/22
+//This file Verifies organizations that request approval from the organ. page
 //
 
 package com.csc340.pcm.views.admin;
@@ -39,6 +40,7 @@ public class VerifyOrganizations extends VerticalLayout {
     public VerifyOrganizations(ValidatedEventsService validatedEventsService, EventRegistrationService eventRegistrationService) {
         this.validatedEventsService = validatedEventsService;
         this.eventRegistrationService = eventRegistrationService;
+        eventRegistrationService.saveEvent(new PendingEventRegistration("1","1","1","1","1","1"));
 
         configureGrid();
         HorizontalLayout buttons = new HorizontalLayout(AcceptButton(), DenyButton());
@@ -62,16 +64,26 @@ public class VerifyOrganizations extends VerticalLayout {
         });
     }
 
+    /**
+     * This method allows the grid to be places properly in the webpage
+     * @return the grid
+     */
     private HorizontalLayout getContent() {
         HorizontalLayout eventScheduler = new HorizontalLayout(selectionList);
         eventScheduler.setSizeFull();
         return eventScheduler;
     }
 
+    /**
+     * updates the Grid's information in real time
+     */
     private void updateGrid(){
         selectionList.setItems(eventRegistrationService.findAllEvents());
     }
 
+    /**
+     * Configures the grid that will be used to select and verify organizations
+     */
     private void configureGrid() {
         Grid<PendingEventRegistration> selectionList = new Grid<>(PendingEventRegistration.class, false);
         selectionList.setColumns("organizationName", "organizationEmail", "organizationPhoneNumber","organizationType", "eventName", "eventDetails");
@@ -103,7 +115,7 @@ public class VerifyOrganizations extends VerticalLayout {
 
     /**
      * This method creates the Accept button that sends the Accept flag to the database alongside the
-     * person/orgonization and a comment
+     * orgonization and a comment
      *
      * @return the accept button that will be displayed onto the webpage
      */
@@ -134,7 +146,7 @@ public class VerifyOrganizations extends VerticalLayout {
 
     /**
      * this method creates the deny button that sends the Deny flag to the database alongside the
-     * person/orgonization and a comment
+     * orgonization and a comment
      *
      * @return the denybutton that will be dislayed onto the webpage
      */

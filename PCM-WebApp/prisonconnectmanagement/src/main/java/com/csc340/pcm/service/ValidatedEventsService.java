@@ -1,3 +1,6 @@
+//Created By Marcus Harrington
+//Last updated 11/15/22
+//This file acts as the "middleman" between Vaadin's UI and the respository database for the ValidatedEvents object
 package com.csc340.pcm.service;
 
 import com.csc340.pcm.entity.ValidatedEvents;
