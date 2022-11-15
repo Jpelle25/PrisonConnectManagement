@@ -2,11 +2,14 @@ package com.csc340.pcm.views.organization;
 
 import com.csc340.pcm.entity.PendingEventRegistration;
 import com.csc340.pcm.entity.PendingScheduledEvents;
+import com.csc340.pcm.entity.ValidatedEvents;
 import com.csc340.pcm.service.EventRegistrationService;
 import com.csc340.pcm.service.EventSchedulerService;
+import com.csc340.pcm.service.ValidatedEventsService;
 import com.csc340.pcm.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -19,16 +22,19 @@ import java.time.format.DateTimeFormatter;
 @RolesAllowed("ROLE_ORGANIZATION")
 public class EventScheduler extends VerticalLayout {
 
-    Grid<PendingEventRegistration> approvedEvents = new Grid<>(PendingEventRegistration.class);
+    Grid<ValidatedEvents> approvedEvents = new Grid<>(ValidatedEvents.class);
     PendingEventScheduleForm pendingEventScheduleForm;
     EventRegistrationService eventRegistrationService;
     EventSchedulerService eventSchedulerService;
+    ValidatedEventsService validatedEventsService;
 
     public EventScheduler(EventRegistrationService eventRegistrationService,
-                          EventSchedulerService eventSchedulerService) {
+                          EventSchedulerService eventSchedulerService,
+                          ValidatedEventsService validatedEventsService) {
 
         this.eventSchedulerService = eventSchedulerService;
         this.eventRegistrationService = eventRegistrationService;
+        this.validatedEventsService = validatedEventsService;
         setSizeFull();
         configureGrid();
         configureForm();
@@ -41,7 +47,8 @@ public class EventScheduler extends VerticalLayout {
     private void configureGrid() {
 
         approvedEvents.setSizeFull();
-        approvedEvents.setColumns("organizationName", "organizationEmail", "organizationPhoneNumber", "organizationType", "eventName");
+        approvedEvents.setColumns("organizationName", "organizationEmail", "organizationPhoneNumber",
+                "organizationType", "eventName", "eventDetails", "status", "comment");
         approvedEvents.getColumns().forEach(col -> col.setAutoWidth(true));
         approvedEvents.asSingleSelect().addValueChangeListener(event -> editEvent(event.getValue()));
 
@@ -49,7 +56,7 @@ public class EventScheduler extends VerticalLayout {
 
     private void configureForm() {
 
-        pendingEventScheduleForm = new PendingEventScheduleForm(eventRegistrationService.findAllEvents());
+        pendingEventScheduleForm = new PendingEventScheduleForm(validatedEventsService.findAllEvents());
         pendingEventScheduleForm.setWidth("25em");
         pendingEventScheduleForm.addListener(PendingEventScheduleForm.EventSchedule.class, this::eventSchedule);
         pendingEventScheduleForm.addListener(PendingEventScheduleForm.CancelEventSchedule.class, e -> closeEditor());
@@ -68,7 +75,7 @@ public class EventScheduler extends VerticalLayout {
 
     private void updateList() {
 
-        approvedEvents.setItems(eventRegistrationService.findAllEvents());
+        approvedEvents.setItems(validatedEventsService.findAllEvents());
 
     }
 
@@ -83,7 +90,7 @@ public class EventScheduler extends VerticalLayout {
 //        eventRegistrationService.saveEvent(event.getEvent());
 //        this.pendingEventScheduleForm
         if(event.getSource().eventStartTime.isEmpty() || event.getSource().eventEndTime.isEmpty()){
-            Notification.show("please fill in all fields in the form");
+            Notification.show("Please fill in all fields in the form");
         }else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm a");
             eventSchedulerService.saveEvent(new PendingScheduledEvents(
@@ -94,19 +101,22 @@ public class EventScheduler extends VerticalLayout {
                     event.getSource().organizationType.getValue(),
                     event.getSource().eventName.getValue(),
                     event.getSource().eventDetails.getValue(),
+                    event.getSource().status.getValue(),
+                    event.getSource().comment.getValue(),
                     event.getSource().eventStartTime.getValue().format(formatter),
                     event.getSource().eventEndTime.getValue().format(formatter)
                 ));
-            Notification.show("Event Successfully Submitted - Pending Schedule Approval");
-            eventRegistrationService.deleteEvent(event.getEvent());
+            Notification scheduleSucess = Notification.show("Event Successfully Submitted - Pending Schedule Approval");
+            scheduleSucess.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            validatedEventsService.deleteEvent(event.getEvent());
             updateList();
             closeEditor();
         }
     }
 
-    private void editEvent(PendingEventRegistration pendingEventRegistration) {
+    private void editEvent(ValidatedEvents validatedEvents) {
 
-        pendingEventScheduleForm.setEvent(pendingEventRegistration);
+        pendingEventScheduleForm.setEvent(validatedEvents);
         pendingEventScheduleForm.setVisible(true);
 
     }

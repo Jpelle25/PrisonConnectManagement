@@ -7,56 +7,56 @@ import javax.validation.constraints.NotNull;
 public class ValidatedSchedules extends AbstractEntity{
 
     @NotNull
-    private String orgName = "";
+    private String organizationName = "";
     @NotNull
-    private String email = "";
+    private String organizationEmail = "";
     @NotNull
-    private String phoneNumber = "";
+    private String organizationPhoneNumber = "";
     @NotNull
-    private String type = "";
+    private String organizationType = "";
     @NotNull
     private String eventName = "";
     @NotNull
     private String eventDetails = "";
     @NotNull
-    private String creationStatus = "";
-    @NotNull
-    private String time = "";
-    @NotNull
     private String status = "";
+    @NotNull
+    private String eventStartTime = "";
+    @NotNull
+    private String eventEndTime = "";
     @NotNull
     private String comment = "";
 
-    public String getOrgName() {
-        return orgName;
+    public String getOrganizationName() {
+        return organizationName;
     }
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getOrganizationEmail() {
+        return organizationEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOrganizationEmail(String organizationEmail) {
+        this.organizationEmail = organizationEmail;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getOrganizationPhoneNumber() {
+        return organizationPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setOrganizationPhoneNumber(String organizationPhoneNumber) {
+        this.organizationPhoneNumber = organizationPhoneNumber;
     }
 
-    public String getType() {
-        return type;
+    public String getOrganizationType() {
+        return organizationType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOrganizationType(String organizationType) {
+        this.organizationType = organizationType;
     }
 
     public String getEventName() {
@@ -75,28 +75,28 @@ public class ValidatedSchedules extends AbstractEntity{
         this.eventDetails = eventDetails;
     }
 
-    public String getCreationStatus() {
-        return creationStatus;
-    }
-
-    public void setCreationStatus(String creationStatus) {
-        this.creationStatus = creationStatus;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getEventStartTime() {
+        return eventStartTime;
+    }
+
+    public void setEventStartTime(String eventStartTime) {
+        this.eventStartTime = eventStartTime;
+    }
+
+    public String getEventEndTime() {
+        return eventEndTime;
+    }
+
+    public void setEventEndTime(String eventEndTime) {
+        this.eventEndTime = eventEndTime;
     }
 
     public String getComment() {
