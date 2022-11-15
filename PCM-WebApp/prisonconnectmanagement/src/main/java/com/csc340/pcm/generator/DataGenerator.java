@@ -1,6 +1,8 @@
 package com.csc340.pcm.generator;
 
 import com.csc340.pcm.repository.PendingEventRegistrationRepository;
+import com.csc340.pcm.entity.Prisoner;
+import com.csc340.pcm.repository.PrisonerRepository;
 import com.vaadin.exampledata.DataType;
 import com.vaadin.exampledata.ExampleDataGenerator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -16,11 +18,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
+import javax.xml.crypto.Data;
+
+import static com.vaadin.exampledata.DataType.*;
+
 @SpringComponent
 public class DataGenerator {
 
     @Bean
-    public CommandLineRunner loadData(PendingEventRegistrationRepository pendingEventRegistrationRepository) {
+    public CommandLineRunner loadData(PrisonerRepository prisonerRepository) {
 
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
@@ -33,19 +39,13 @@ public class DataGenerator {
 
             logger.info("Event generation");
 
-//            ExampleDataGenerator<Event> eventGenerator = new ExampleDataGenerator<>(Event.class, LocalDateTime.now());
-//            eventGenerator.setData(Event::setOrganizationName, DataType.COMPANY_NAME);
-//            eventGenerator.setData(Event::setOrganizationEmail, DataType.EMAIL);
-//            eventGenerator.setData(Event::setOrganizationPhoneNumber, DataType.PHONE_NUMBER);
-//            List<String> eventTypes = Arrays.asList("Fundraising", "Visitation", "Rehabilitation", "Arts & Craft");
-//            eventGenerator.setData(Event::setEventName, DataType.WORD);
-//            eventGenerator.setData(Event::setEventDetails, DataType.SENTENCE);
-//            List<Event> events = eventGenerator.create(10, seed).stream().map(event -> {
-//                event.setOrganizationType(eventTypes.get(r.nextInt(eventTypes.size())));
-//                return event;
-//            }).collect(Collectors.toList());
-//
-//            eventRepository.saveAll(events);
+
+            ExampleDataGenerator<Prisoner> prisonerGenerator = new ExampleDataGenerator<>(Prisoner.class, LocalDateTime.now());
+            prisonerGenerator.setData(Prisoner::setFirstName, DataType.FIRST_NAME);
+            prisonerGenerator.setData(Prisoner::setLastName, DataType.LAST_NAME);
+            List<Prisoner> prisoners = prisonerGenerator.create(20, seed).stream().collect(Collectors.toList());
+
+            prisonerRepository.saveAll(prisoners);
 
             logger.info("Got to here after event generation");
 

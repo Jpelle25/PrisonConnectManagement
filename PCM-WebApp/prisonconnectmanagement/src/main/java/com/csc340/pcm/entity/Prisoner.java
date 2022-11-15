@@ -1,29 +1,26 @@
-package com.csc340.pcm.views.visitor;
+package com.csc340.pcm.entity;
 
 import com.csc340.pcm.entity.AbstractEntity;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-public class Prisoner extends AbstractEntity implements Serializable {
+public class Prisoner extends AbstractEntity {
 
     @NotEmpty
-    private String firstName = "";
+    private String firstName;
 
     @NotEmpty
-    private String lastName = "";
+    private String lastName;
 
-    public Prisoner (String firstName, String lastName){
+    public Prisoner(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    @Override
-    public String toString() {
-        return firstName + " " + lastName;
+    public Prisoner() {
+
     }
 
     public String getFirstName() {
@@ -41,5 +38,6 @@ public class Prisoner extends AbstractEntity implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
 
 }
