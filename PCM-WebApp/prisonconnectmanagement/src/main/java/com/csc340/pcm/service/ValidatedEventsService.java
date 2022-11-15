@@ -18,4 +18,11 @@ public class ValidatedEventsService {
     public List<ValidatedEvents> findAllEvents() {
         return validatedEventsRepository.findAll();
     }
+    public void saveEvent(ValidatedEvents validatedEvents){
+        if (validatedEvents == null) {
+            System.err.println("Event is null. Are you sure you have connected your form to the application?");
+            return;
+        }
+        validatedEventsRepository.save(validatedEvents);
+    }
 }
