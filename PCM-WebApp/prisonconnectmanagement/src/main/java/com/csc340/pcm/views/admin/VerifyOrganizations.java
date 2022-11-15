@@ -4,8 +4,10 @@
 
 package com.csc340.pcm.views.admin;
 
-import com.csc340.pcm.entity.Request;
+import com.csc340.pcm.entity.PendingEventRegistration;
+import com.csc340.pcm.service.EventRegistrationService;
 import com.csc340.pcm.views.MainLayout;
+import com.csc340.pcm.views.organization.EventRegistration;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -17,34 +19,59 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.grid.Grid;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.List;
+import java.util.Optional;
 
-@Route(value = "PendingRequests", layout = MainLayout.class)
-@PageTitle("Requests | PCM")
+@Route(value = "VerifyOrganizations", layout = MainLayout.class)
+@PageTitle("Org-Requests | PCM")
 @RolesAllowed("ROLE_ADMIN")
-public class AcceptDenyView extends VerticalLayout {
+public class VerifyOrganizations extends VerticalLayout {
 
+    EventRegistrationService eventRegistrationService;
+    Grid<PendingEventRegistration> selectionList = new Grid<>(PendingEventRegistration.class);
 
-    public AcceptDenyView() {
-        add(SelectionList(),CommentBox());
-        HorizontalLayout buttons = new HorizontalLayout(AcceptButton(),DenyButton());
+    public VerifyOrganizations(EventRegistrationService eventRegistrationService) {
+        this.eventRegistrationService = eventRegistrationService;
+
+        configureGrid();
+        HorizontalLayout buttons = new HorizontalLayout(AcceptButton(), DenyButton());
         buttons.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        add(buttons);
+        add(getContent(),CommentBox(),buttons);
+        updateGrid();
+        gridListener();
+
     }
 
-    private Grid SelectionList(){
-        Grid<Request> selectionList = new Grid<>(Request.class, false);
-        selectionList.addColumn(Request::getRequestType).setHeader("Is Orgonization?");
-        selectionList.addColumn(Request::getName).setHeader("Requester Name");
-        selectionList.addColumn(Request::getDate).setHeader("Date Requested");
-
-        List<Request> requests;
-
+    /**
+     * This method creates a listener to select an entry in the list to then write a comment on and approve/deny
+     */
+    private void gridListener(){
         selectionList.addSelectionListener(selectionEvent -> {
-            Notification.show("You selected a thing");
+            Optional<PendingEventRegistration> optionalEvent = selectionEvent.getFirstSelectedItem();
+            if(optionalEvent.isPresent()){
+                Notification.show("You selected " + optionalEvent.get().getOrganizationName());
+            }
         });
+    }
 
-        return selectionList;
+    private HorizontalLayout getContent() {
+        HorizontalLayout eventScheduler = new HorizontalLayout(selectionList);
+        eventScheduler.setSizeFull();
+        return eventScheduler;
+    }
+
+    private void updateGrid(){
+        selectionList.setItems(eventRegistrationService.findAllEvents());
+    }
+
+    private void configureGrid() {
+        Grid<PendingEventRegistration> selectionList = new Grid<>(PendingEventRegistration.class, false);
+        selectionList.setColumns("organizationName", "organizationEmail", "organizationPhoneNumber","organizationType","eventName");
+        selectionList.getColumns().forEach(col -> col.setAutoWidth(true));
+        selectionList.asSingleSelect().addValueChangeListener(event -> editEvent(event.getValue()));
+    }
+
+    private void editEvent(PendingEventRegistration value) {
+        //value.setEvent
     }
 
     /**
@@ -70,32 +97,10 @@ public class AcceptDenyView extends VerticalLayout {
         return commentBox;
     }
 
-    /*/**
-     * this method creates the selection to accept or deny requests
-     *
-     * @return the radio button object to place it on the webpage
-     */
-    /*public RadioButtonGroup AcceptDenyButton() {
-        RadioButtonGroup<String> acceptDeny = new RadioButtonGroup<>();
-        final String[] test = {""};
-        acceptDeny.setLabel("Request status");
-        acceptDeny.setItems("Approve", "Deny");
-        acceptDeny.addValueChangeListener(radioButtonGroupStringComponentValueChangeEvent -> {
-            test[0] = acceptDeny.getValue();
-            Notification.show("Value changed to " + test[0]);
-
-            if (test[0].equals("Approve") || test[0].equals("Deny")){
-                SubmitButton().setEnabled(true);
-            }
-        });
-        acceptDeny.setReadOnly(false);
-        acceptDeny.setRequiredIndicatorVisible(true);
-        return acceptDeny;
-    }*/
-
     /**
      * This method creates the Accept button that sends the Accept flag to the database alongside the
      * person/orgonization and a comment
+     *
      * @return the accept button that will be displayed onto the webpage
      */
     private Button AcceptButton() {
@@ -110,6 +115,7 @@ public class AcceptDenyView extends VerticalLayout {
     /**
      * this method creates the deny button that sends the Deny flag to the database alongside the
      * person/orgonization and a comment
+     *
      * @return the denybutton that will be dislayed onto the webpage
      */
     private Button DenyButton() {
