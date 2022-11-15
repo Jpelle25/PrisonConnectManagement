@@ -2,6 +2,7 @@ package com.csc340.pcm.views.organization;
 
 import com.csc340.pcm.entity.PendingEventRegistration;
 import com.csc340.pcm.entity.PendingScheduledEvents;
+import com.csc340.pcm.security.SecurityService;
 import com.csc340.pcm.service.EventRegistrationService;
 import com.csc340.pcm.service.EventSchedulerService;
 import com.csc340.pcm.views.MainLayout;
@@ -16,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 
 @PageTitle("EventScheduler")
 @Route(value = "EventScheduler", layout = MainLayout.class)
-@RolesAllowed("ROLE_ORGANIZATION")
+@RolesAllowed({"ROLE_ORGANIZATION", "ROLE_VISITOR"})
 public class EventScheduler extends VerticalLayout {
 
     Grid<PendingEventRegistration> approvedEvents = new Grid<>(PendingEventRegistration.class);

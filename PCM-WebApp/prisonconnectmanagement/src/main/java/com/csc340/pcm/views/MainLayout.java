@@ -76,7 +76,7 @@ public class MainLayout extends AppLayout {
         else{
             addToDrawer(new VerticalLayout(
                     new RouterLink("Visitors", VisitorView.class),
-                    new RouterLink("Events List", EventList.class)
+                    new RouterLink("Events List", EventScheduler.class)
             ));
         }
 

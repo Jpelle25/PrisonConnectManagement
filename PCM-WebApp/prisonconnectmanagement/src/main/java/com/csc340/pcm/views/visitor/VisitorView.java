@@ -1,5 +1,7 @@
 package com.csc340.pcm.views.visitor;
 
+import com.csc340.pcm.entity.Appointment;
+import com.csc340.pcm.entity.PendingEventRegistration;
 import com.csc340.pcm.entity.Prisoner;
 import com.csc340.pcm.service.PrisonerService;
 
@@ -59,24 +61,6 @@ public class VisitorView extends VerticalLayout {
         add(getContent());
         updateList();
 
-        add(new H2("Select a date"));
-        DateTimePicker dateTimePicker = new DateTimePicker();
-        dateTimePicker.setLabel("Appointment date and time");
-
-        dateTimePicker.setMax(LocalDateTime.now().plusDays(30));
-        dateTimePicker.setValue(LocalDateTime.now().plusDays(7));
-        add(dateTimePicker);
-
-        Button saveButton = new Button("Save");
-        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
-                ButtonVariant.LUMO_SUCCESS);
-        add(saveButton);
-        saveButton.addClickListener(buttonClickEvent -> {
-            Notification notification = Notification
-                    .show("Appointment submitted");
-            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        });
-
     }
 
     /**
@@ -114,6 +98,14 @@ public class VisitorView extends VerticalLayout {
         grid.setSizeFull();
         grid.setColumns("firstName", "lastName");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+        grid.asSingleSelect().addValueChangeListener(event -> editEvent(event.getValue()));
+    }
+
+    private void editEvent(Prisoner prisoners) {
+
+        form.setPrisoner(prisoners);
+        form.setVisible(true);
+
     }
 
     /**
@@ -121,7 +113,7 @@ public class VisitorView extends VerticalLayout {
      * @return nothing
      */
     private void configureForm() {
-        form = new PrisonersForm();
+        form = new PrisonersForm(prisonerService.findAllPrisoners());
         form.setWidth("25em");
     }
 
@@ -130,7 +122,7 @@ public class VisitorView extends VerticalLayout {
      */
     private void updateList() {
 
-        grid.setItems(prisonerService.findAllEvents());
+        grid.setItems(prisonerService.findAllPrisoners());
 
     }
 //

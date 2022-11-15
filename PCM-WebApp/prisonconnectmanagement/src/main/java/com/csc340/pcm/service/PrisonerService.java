@@ -15,7 +15,7 @@ public class PrisonerService {
         this.prisonerRepository = prisonerRepository;
     }
 
-    public List<Prisoner> findAllEvents() {
+    public List<Prisoner> findAllPrisoners() {
         return prisonerRepository.findAll();
     }
 
