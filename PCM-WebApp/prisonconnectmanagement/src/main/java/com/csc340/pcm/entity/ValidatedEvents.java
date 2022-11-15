@@ -22,6 +22,20 @@ public class ValidatedEvents extends AbstractEntity {
     @NotNull
     private String comment = "";
 
+    public ValidatedEvents(String orgName, String email, String phoneNumber, String type, String eventName, String eventDetails, String status, String comment) {
+        this.orgName = orgName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.type = type;
+        this.eventName = eventName;
+        this.eventDetails = eventDetails;
+        this.status = status;
+        this.comment = comment;
+    }
+    public ValidatedEvents(){
+
+    }
+
     public String getOrgName() {
         return orgName;
     }

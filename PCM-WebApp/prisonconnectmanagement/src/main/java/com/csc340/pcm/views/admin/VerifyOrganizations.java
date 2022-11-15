@@ -5,7 +5,10 @@
 package com.csc340.pcm.views.admin;
 
 import com.csc340.pcm.entity.PendingEventRegistration;
+import com.csc340.pcm.entity.Request;
+import com.csc340.pcm.entity.ValidatedEvents;
 import com.csc340.pcm.service.EventRegistrationService;
+import com.csc340.pcm.service.ValidatedEventsService;
 import com.csc340.pcm.views.MainLayout;
 import com.csc340.pcm.views.organization.EventRegistration;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -26,10 +29,15 @@ import java.util.Optional;
 @RolesAllowed("ROLE_ADMIN")
 public class VerifyOrganizations extends VerticalLayout {
 
+    ValidatedEventsService validatedEventsService;
     EventRegistrationService eventRegistrationService;
-    Grid<PendingEventRegistration> selectionList = new Grid<>(PendingEventRegistration.class);
 
-    public VerifyOrganizations(EventRegistrationService eventRegistrationService) {
+    Grid<PendingEventRegistration> selectionList = new Grid<>(PendingEventRegistration.class);
+    TextArea commentBox = new TextArea();
+    Optional<PendingEventRegistration> currentEvent;
+
+    public VerifyOrganizations(ValidatedEventsService validatedEventsService, EventRegistrationService eventRegistrationService) {
+        this.validatedEventsService = validatedEventsService;
         this.eventRegistrationService = eventRegistrationService;
 
         configureGrid();
@@ -39,6 +47,7 @@ public class VerifyOrganizations extends VerticalLayout {
         updateGrid();
         gridListener();
 
+
     }
 
     /**
@@ -46,9 +55,9 @@ public class VerifyOrganizations extends VerticalLayout {
      */
     private void gridListener(){
         selectionList.addSelectionListener(selectionEvent -> {
-            Optional<PendingEventRegistration> optionalEvent = selectionEvent.getFirstSelectedItem();
-            if(optionalEvent.isPresent()){
-                Notification.show("You selected " + optionalEvent.get().getOrganizationName());
+            currentEvent = selectionEvent.getFirstSelectedItem();
+            if(currentEvent.isPresent()){
+                Notification.show("You selected " + currentEvent.get().getOrganizationName());
             }
         });
     }
@@ -65,13 +74,8 @@ public class VerifyOrganizations extends VerticalLayout {
 
     private void configureGrid() {
         Grid<PendingEventRegistration> selectionList = new Grid<>(PendingEventRegistration.class, false);
-        selectionList.setColumns("organizationName", "organizationEmail", "organizationPhoneNumber","organizationType","eventName");
+        selectionList.setColumns("organizationName", "organizationEmail", "organizationPhoneNumber","organizationType", "eventName", "eventDetails");
         selectionList.getColumns().forEach(col -> col.setAutoWidth(true));
-        selectionList.asSingleSelect().addValueChangeListener(event -> editEvent(event.getValue()));
-    }
-
-    private void editEvent(PendingEventRegistration value) {
-        //value.setEvent
     }
 
     /**
@@ -106,9 +110,25 @@ public class VerifyOrganizations extends VerticalLayout {
     private Button AcceptButton() {
         Button acceptButton = new Button("Accept");
         acceptButton.setEnabled(true);
-        acceptButton.addClickListener(clickEvent -> {
-
+        acceptButton.addClickListener(buttonClickEvent -> {
+            if(commentBox.getValue().isEmpty()){
+                Notification.show("Please enter a comment.");
+            }
+            else{
+                validatedEventsService.saveEvent(new ValidatedEvents(
+                        currentEvent.get().getOrganizationName(),
+                        currentEvent.get().getOrganizationEmail(),
+                        currentEvent.get().getOrganizationPhoneNumber(),
+                        currentEvent.get().getOrganizationType(),
+                        currentEvent.get().getEventName(),
+                        currentEvent.get().getEventDetails(),
+                        "Approved",
+                        commentBox.getValue()
+                ));
+            }
         });
+        commentBox.clear();
+        eventRegistrationService.deleteEvent(currentEvent.get());
         return acceptButton;
     }
 
@@ -122,8 +142,24 @@ public class VerifyOrganizations extends VerticalLayout {
         Button denyButton = new Button("Deny");
         denyButton.setEnabled(true);
         denyButton.addClickListener(buttonClickEvent -> {
-
+            if(commentBox.getValue().isEmpty()){
+                Notification.show("Please enter a comment.");
+            }
+            else{
+                validatedEventsService.saveEvent(new ValidatedEvents(
+                        currentEvent.get().getOrganizationName(),
+                        currentEvent.get().getOrganizationEmail(),
+                        currentEvent.get().getOrganizationPhoneNumber(),
+                        currentEvent.get().getOrganizationType(),
+                        currentEvent.get().getEventName(),
+                        currentEvent.get().getEventDetails(),
+                        "Deny",
+                        commentBox.getValue()
+                ));
+            }
         });
+        commentBox.clear();
+        eventRegistrationService.deleteEvent(currentEvent.get());
         return denyButton;
     }
 }
