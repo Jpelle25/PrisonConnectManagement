@@ -12,34 +12,18 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.router.Route;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.List;
 
 @Route(value = "PrisonersForm", layout = MainLayout.class)
 @RolesAllowed("ROLE_VISITOR")
-public class PrisonersForm extends FormLayout{
+public class PrisonersForm extends FormLayout {
     TextField firstName = new TextField("First Name");
     TextField lastName = new TextField("Last Name");
 
-    Button save = new Button("Save");
-    Button delete = new Button("Delete");
-    Button cancel = new Button("Cancel");
 
-    public PrisonersForm(){
+    public PrisonersForm() {
         add(
                 firstName,
                 lastName
-                //creatButtonLayout()
         );
     }
-
-//    private Component creatButtonLayout() {
-//        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-//        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-//        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-//
-//        save.addClickShortcut(Key.ENTER);
-//        cancel.addClickShortcut(Key.ESCAPE);
-//
-//        return new HorizontalLayout(save, delete, cancel);
-//    }
 }

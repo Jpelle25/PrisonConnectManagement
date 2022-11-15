@@ -1,6 +1,7 @@
 package com.csc340.pcm.views.visitor;
 
 import com.csc340.pcm.views.MainLayout;
+import com.csc340.pcm.views.organization.EventScheduler;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
@@ -20,6 +21,10 @@ import java.util.List;
 public class EventList extends VerticalLayout {
     Grid<Events> grid = new Grid<>(Events.class, false);
 
+    /**
+     *  Is what shows the event list when choosen in the sidebar
+     *  return: nothing
+     */
     public EventList() {
         setSizeFull();
         configureGrid();
@@ -35,14 +40,16 @@ public class EventList extends VerticalLayout {
         });
     }
 
+    /**
+     *  Configures the List view of the grid with Events
+     *  return: nothing
+     */
     private void configureGrid() {
         grid.setSizeFull();
         grid.setColumns("eventName", "date", "description");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
-        List<Events> events = Arrays.asList(new Events("BBQ", "07/04/2022", "Barbeque with MSS!!"),
-                new Events("Carnival", "10/25/2022", "Come enjoy a great carnival!"));
-        grid.setItems(events);
+
     }
 
 }
