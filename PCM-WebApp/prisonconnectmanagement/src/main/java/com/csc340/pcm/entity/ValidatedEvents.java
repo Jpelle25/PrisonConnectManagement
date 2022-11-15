@@ -6,13 +6,13 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class ValidatedEvents extends AbstractEntity {
     @NotNull
-    private String orgName = "";
+    private String organizationName = "";
     @NotNull
-    private String email = "";
+    private String organizationEmail = "";
     @NotNull
-    private String phoneNumber = "";
+    private String organizationPhoneNumber = "";
     @NotNull
-    private String type = "";
+    private String organizationType = "";
     @NotNull
     private String eventName = "";
     @NotNull
@@ -22,11 +22,12 @@ public class ValidatedEvents extends AbstractEntity {
     @NotNull
     private String comment = "";
 
-    public ValidatedEvents(String orgName, String email, String phoneNumber, String type, String eventName, String eventDetails, String status, String comment) {
-        this.orgName = orgName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.type = type;
+    public ValidatedEvents(String organizationName, String organizationEmail, String organizationPhoneNumber,
+                           String organizationType, String eventName, String eventDetails, String status, String comment) {
+        this.organizationName = organizationName;
+        this.organizationEmail = organizationEmail;
+        this.organizationPhoneNumber = organizationPhoneNumber;
+        this.organizationType = organizationType;
         this.eventName = eventName;
         this.eventDetails = eventDetails;
         this.status = status;
@@ -36,36 +37,36 @@ public class ValidatedEvents extends AbstractEntity {
 
     }
 
-    public String getOrgName() {
-        return orgName;
+    public String getOrganizationName() {
+        return organizationName;
     }
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getOrganizationEmail() {
+        return organizationEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOrganizationEmail(String organizationEmail) {
+        this.organizationEmail = organizationEmail;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getOrganizationPhoneNumber() {
+        return organizationPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setOrganizationPhoneNumber(String organizationPhoneNumber) {
+        this.organizationPhoneNumber = organizationPhoneNumber;
     }
 
-    public String getType() {
-        return type;
+    public String getOrganizationType() {
+        return organizationType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOrganizationType(String organizationType) {
+        this.organizationType = organizationType;
     }
 
     public String getEventName() {

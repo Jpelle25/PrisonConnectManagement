@@ -1,5 +1,6 @@
 package com.csc340.pcm.service;
 
+import com.csc340.pcm.entity.PendingEventRegistration;
 import com.csc340.pcm.entity.ValidatedEvents;
 import com.csc340.pcm.repository.ValidatedEventsRepository;
 import org.springframework.stereotype.Service;
@@ -24,5 +25,9 @@ public class ValidatedEventsService {
             return;
         }
         validatedEventsRepository.save(validatedEvents);
+    }
+
+    public void deleteEvent(ValidatedEvents validatedEvents) {
+        validatedEventsRepository.delete(validatedEvents);
     }
 }

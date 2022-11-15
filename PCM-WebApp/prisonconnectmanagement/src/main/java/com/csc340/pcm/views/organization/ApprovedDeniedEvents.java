@@ -32,7 +32,7 @@ public class ApprovedDeniedEvents extends VerticalLayout {
     private void configureGrid() {
 
         completeEvents.setColumns("organizationName", "organizationEmail", "organizationPhoneNumber",
-                "organizationType", "eventName", "startTime", "endTime");
+                "organizationType", "eventName", "status", "comment", "startTime", "endTime");
         completeEvents.getColumns().forEach(col -> col.setAutoWidth(true));
 
     }
